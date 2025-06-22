@@ -2,11 +2,12 @@
 import { usePathname } from 'next/navigation';
 import Link from 'next/link';
 import { SidebarMenu, SidebarMenuItem, SidebarMenuButton } from '@/components/ui/sidebar';
-import { Sparkles, Gem } from 'lucide-react';
+import { Home, Sparkles, Gem } from 'lucide-react';
 import type { FC } from 'react';
 
 const navItems = [
-  { href: '/', label: 'Generator', icon: <Sparkles /> },
+  { href: '/', label: 'Home', icon: <Home /> },
+  { href: '/generate', label: 'Generator', icon: <Sparkles /> },
   { href: '/pricing', label: 'Pricing', icon: <Gem /> },
 ];
 
