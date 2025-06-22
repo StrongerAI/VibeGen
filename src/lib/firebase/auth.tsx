@@ -1,7 +1,7 @@
 'use client';
 
-import { createContext, useContext, useEffect, useState, useMemo } from 'react';
-import { getAuth, onAuthStateChanged, GoogleAuthProvider, signInWithPopup, signOut, type User } from 'firebase/auth';
+import { createContext, useContext, useEffect, useState } from 'react';
+import { getAuth, onAuthStateChanged, GoogleAuthProvider, signInWithPopup, signOut, type User, type Auth } from 'firebase/auth';
 import { app } from './client';
 import { Loader2 } from 'lucide-react';
 
@@ -14,22 +14,16 @@ interface AuthContextType {
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
+// Initialize auth at the module level for stability.
+const auth: Auth | null = app ? getAuth(app) : null;
+
 export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   const [user, setUser] = useState<User | null>(null);
   const [loading, setLoading] = useState(true);
 
-  const { auth, provider } = useMemo(() => {
-    if (app) {
-      const authInstance = getAuth(app);
-      const providerInstance = new GoogleAuthProvider();
-      return { auth: authInstance, provider: providerInstance };
-    }
-    return { auth: null, provider: null };
-  }, []);
-
-
   useEffect(() => {
     if (!auth) {
+      // This handles the case where Firebase config is missing.
       setLoading(false);
       return;
     }
@@ -38,14 +32,15 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
       setLoading(false);
     });
     return () => unsubscribe();
-  }, [auth]);
+  }, []); // Empty dependency array is correct as `auth` is a stable module constant.
   
   const handleSignIn = async () => {
-    if (!auth || !provider) {
+    if (!auth) {
         console.error("Firebase Auth not initialized.");
         return;
     }
     try {
+      const provider = new GoogleAuthProvider();
       await signInWithPopup(auth, provider);
     } catch (error) {
       console.error("Error signing in with Google: ", error);
