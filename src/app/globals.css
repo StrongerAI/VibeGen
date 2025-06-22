@@ -11,14 +11,14 @@
     --popover: 0 0% 100%;
     --popover-foreground: 0 0% 3.9%;
     --primary: 278 100% 41%;
-    --primary-translucent: 278 100% 41% / 0.5;
+    --primary-translucent: 278 100% 41% / 0.6;
     --primary-foreground: 0 0% 98%;
     --secondary: 0 0% 96.1%;
     --secondary-foreground: 0 0% 9%;
     --muted: 0 0% 96.1%;
     --muted-foreground: 0 0% 45.1%;
     --accent: 182 99% 73%;
-    --accent-translucent: 182 99% 73% / 0.5;
+    --accent-translucent: 182 99% 73% / 0.6;
     --accent-foreground: 278 32% 9%;
     --destructive: 0 84.2% 60.2%;
     --destructive-foreground: 0 0% 98%;
@@ -48,14 +48,14 @@
     --popover: 278 32% 9%;
     --popover-foreground: 0 0% 98%;
     --primary: 278 100% 50%;
-    --primary-translucent: 278 100% 50% / 0.5;
+    --primary-translucent: 278 100% 50% / 0.6;
     --primary-foreground: 0 0% 98%;
     --secondary: 278 20% 20%;
     --secondary-foreground: 0 0% 98%;
     --muted: 278 20% 15%;
     --muted-foreground: 0 0% 63.9%;
     --accent: 182 99% 73%;
-    --accent-translucent: 182 99% 73% / 0.5;
+    --accent-translucent: 182 99% 73% / 0.6;
     --accent-foreground: 278 32% 9%;
     --destructive: 0 62.8% 30.6%;
     --destructive-foreground: 0 0% 98%;
@@ -94,5 +94,15 @@
     radial-gradient(ellipse at 85% 35%, hsl(var(--accent-translucent)) 0px, transparent 60%),
     radial-gradient(ellipse at 90% 85%, hsl(var(--primary-translucent)) 0px, transparent 60%),
     radial-gradient(ellipse at 25% 90%, hsl(var(--accent-translucent)) 0px, transparent 60%);
+  background-attachment: fixed;
+}
+
+.dark-splash-bg {
+  background-color: hsl(var(--background));
+  background-image:
+    radial-gradient(ellipse at 15% 25%, hsl(var(--muted) / 0.2) 0px, transparent 50%),
+    radial-gradient(ellipse at 80% 30%, hsl(var(--secondary) / 0.15) 0px, transparent 50%),
+    radial-gradient(ellipse at 90% 80%, hsl(var(--muted) / 0.2) 0px, transparent 50%),
+    radial-gradient(ellipse at 30% 85%, hsl(var(--secondary) / 0.15) 0px, transparent 50%);
   background-attachment: fixed;
 }
