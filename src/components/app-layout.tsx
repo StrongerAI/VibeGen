@@ -1,27 +1,19 @@
 'use client';
 
 import { usePathname } from 'next/navigation';
-import { SidebarProvider, Sidebar, SidebarHeader, SidebarInset } from '@/components/ui/sidebar';
-import Logo from '@/components/logo';
-import { MainNav } from '@/components/main-nav';
+import { TopNav } from '@/components/top-nav';
 
 export function AppLayout({ children }: { children: React.ReactNode }) {
   const pathname = usePathname();
 
-  // Don't show the sidebar on the landing page
-  const showSidebar = pathname !== '/';
+  const showNav = pathname !== '/';
 
-  if (showSidebar) {
+  if (showNav) {
     return (
-      <SidebarProvider>
-        <Sidebar>
-          <SidebarHeader>
-            <Logo />
-          </SidebarHeader>
-          <MainNav />
-        </Sidebar>
-        <SidebarInset>{children}</SidebarInset>
-      </SidebarProvider>
+      <div className="relative flex min-h-screen w-full flex-col">
+        <TopNav />
+        <main className="flex-1">{children}</main>
+      </div>
     );
   }
 
