@@ -80,7 +80,7 @@ export function TopNav() {
                       {user.displayName?.charAt(0) || 'U'}
                     </AvatarFallback>
                   </Avatar>
-                   <span className="hidden text-sm font-medium sm:inline-block">{user.displayName}</span>
+                   <span className="text-sm font-medium">{user.displayName}</span>
                 </Button>
               </DropdownMenuTrigger>
               <DropdownMenuContent className="w-56" align="end" forceMount>
