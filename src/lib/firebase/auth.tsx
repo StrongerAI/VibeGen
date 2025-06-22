@@ -9,13 +9,15 @@ import { useToast } from '@/hooks/use-toast';
 interface AuthContextType {
   user: User | null;
   loading: boolean;
+  isFirebaseConfigured: boolean;
   handleSignIn: () => Promise<void>;
   handleSignOut: () => Promise<void>;
 }
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
-const auth: Auth | null = app ? getAuth(app) : null;
+const isFirebaseConfigured = !!app;
+const auth: Auth | null = isFirebaseConfigured ? getAuth(app!) : null;
 
 export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   const [user, setUser] = useState<User | null>(null);
@@ -23,7 +25,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   const { toast } = useToast();
 
   useEffect(() => {
-    if (!auth) {
+    if (!isFirebaseConfigured || !auth) {
       setLoading(false);
       return;
     }
@@ -35,7 +37,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   }, []);
   
   const handleSignIn = async () => {
-    if (!auth) {
+    if (!isFirebaseConfigured || !auth) {
         console.error("Firebase Auth not initialized.");
         toast({
             title: "Authentication Error",
@@ -58,7 +60,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   };
 
   const handleSignOut = async () => {
-    if (!auth) {
+    if (!isFirebaseConfigured || !auth) {
         console.error("Firebase Auth not initialized.");
         toast({
             title: "Authentication Error",
@@ -88,7 +90,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   }
 
   return (
-    <AuthContext.Provider value={{ user, loading, handleSignIn, handleSignOut }}>
+    <AuthContext.Provider value={{ user, loading, isFirebaseConfigured, handleSignIn, handleSignOut }}>
       {children}
     </AuthContext.Provider>
   );

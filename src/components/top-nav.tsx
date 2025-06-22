@@ -9,6 +9,12 @@ import { cn } from '@/lib/utils';
 import { useAuth } from '@/lib/firebase/auth';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Skeleton } from '@/components/ui/skeleton';
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from '@/components/ui/tooltip';
 
 const navItems = [
   { href: '/', label: 'Home', icon: Home },
@@ -18,16 +24,15 @@ const navItems = [
 
 export function TopNav() {
   const pathname = usePathname();
-  const { user, loading, handleSignIn, handleSignOut } = useAuth();
+  const { user, loading, handleSignIn, handleSignOut, isFirebaseConfigured } =
+    useAuth();
   const isLanding = pathname === '/';
 
   return (
     <header
       className={cn(
         'sticky top-0 z-50 w-full border-b',
-        isLanding
-          ? 'border-transparent'
-          : 'border-border/40 bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60'
+        'border-border/40 bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60'
       )}
     >
       <div className="container relative flex h-14 max-w-screen-2xl items-center justify-between px-6">
@@ -58,6 +63,22 @@ export function TopNav() {
         <div className="flex items-center gap-4">
           {loading ? (
             <Skeleton className="h-10 w-28 rounded-md" />
+          ) : !isFirebaseConfigured ? (
+            <TooltipProvider>
+              <Tooltip>
+                <TooltipTrigger asChild>
+                  <span tabIndex={0}>
+                    <Button disabled>
+                      <LogIn className="mr-2 h-4 w-4" />
+                      Sign In
+                    </Button>
+                  </span>
+                </TooltipTrigger>
+                <TooltipContent>
+                  <p>Authentication service is not configured.</p>
+                </TooltipContent>
+              </Tooltip>
+            </TooltipProvider>
           ) : user ? (
             <>
               <Avatar className="h-9 w-9">
