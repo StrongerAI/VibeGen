@@ -38,7 +38,7 @@ export function TopNav() {
           : 'border-border/40 bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60'
       )}
     >
-      <div className="container flex h-14 max-w-screen-2xl items-center justify-between">
+      <div className="container flex h-14 max-w-screen-2xl items-center justify-between px-6">
         <div className="flex items-center">
           <Link href="/" className="mr-6 flex items-center space-x-2">
             <Logo />
@@ -103,7 +103,7 @@ export function TopNav() {
               </DropdownMenuContent>
             </DropdownMenu>
           ) : (
-            <Button onClick={handleSignIn}>Sign In</Button>
+            isLanding && <Button onClick={handleSignIn}>Sign In</Button>
           )}
         </div>
       </div>
