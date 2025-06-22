@@ -11,7 +11,7 @@ export default function Home() {
       <section className="w-full flex items-center justify-center text-center min-h-screen">
         <div className="container px-4 md:px-6">
           <div className="max-w-4xl mx-auto">
-            <h1 className="text-5xl md:text-8xl font-headline font-bold text-transparent bg-clip-text bg-gradient-to-r from-primary to-accent transition-transform duration-300 hover:scale-105 cursor-pointer">
+            <h1 className="text-5xl md:text-8xl font-headline text-transparent bg-clip-text bg-gradient-to-r from-primary to-accent transition-transform duration-300 hover:scale-105 cursor-pointer">
               VibeGen
             </h1>
             <p className="mt-4 text-2xl md:text-3xl text-muted-foreground max-w-3xl mx-auto">
