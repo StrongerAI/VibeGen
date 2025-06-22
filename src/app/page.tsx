@@ -6,7 +6,7 @@ import Link from "next/link";
 
 export default function Home() {
   return (
-    <div className="flex flex-col bg-gradient-to-br from-secondary via-primary to-accent bg-[length:400%_400%] animate-background-pan">
+    <div className="flex flex-col paint-splash-bg">
       {/* Hero Section */}
       <section className="w-full flex items-center justify-center text-center min-h-screen">
         <div className="container px-4 md:px-6">
