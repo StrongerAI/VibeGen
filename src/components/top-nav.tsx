@@ -1,3 +1,4 @@
+
 'use client';
 
 import Link from 'next/link';
@@ -53,20 +54,22 @@ export function TopNav() {
             <Logo />
           </Link>
           <nav className="hidden items-center gap-6 text-sm md:flex">
-            {navItems.map((item) => (
-              <Link
-                key={item.label}
-                href={item.href}
-                className={cn(
-                  'transition-colors hover:text-foreground/80',
-                  pathname === item.href
-                    ? 'text-foreground font-semibold'
-                    : 'text-foreground/60'
-                )}
-              >
-                {item.label}
-              </Link>
-            ))}
+            {navItems
+              .filter((item) => !isLanding || item.href !== '/')
+              .map((item) => (
+                <Link
+                  key={item.label}
+                  href={item.href}
+                  className={cn(
+                    'transition-colors hover:text-foreground/80',
+                    pathname === item.href
+                      ? 'text-foreground font-semibold'
+                      : 'text-foreground/60'
+                  )}
+                >
+                  {item.label}
+                </Link>
+              ))}
           </nav>
         </div>
 
@@ -134,22 +137,24 @@ export function TopNav() {
                     <Logo />
                   </Link>
                   <nav className="flex flex-col gap-4">
-                    {navItems.map((item) => (
-                      <Link
-                        key={item.label}
-                        href={item.href}
-                        onClick={() => setOpen(false)}
-                        className={cn(
-                          'transition-colors hover:text-foreground/80 flex items-center gap-3 p-2 rounded-md',
-                          pathname === item.href
-                            ? 'text-foreground bg-muted font-semibold'
-                            : 'text-foreground/60'
-                        )}
-                      >
-                        <item.icon className="h-5 w-5" />
-                        <span className="text-lg">{item.label}</span>
-                      </Link>
-                    ))}
+                    {navItems
+                      .filter((item) => !isLanding || item.href !== '/')
+                      .map((item) => (
+                        <Link
+                          key={item.label}
+                          href={item.href}
+                          onClick={() => setOpen(false)}
+                          className={cn(
+                            'transition-colors hover:text-foreground/80 flex items-center gap-3 p-2 rounded-md',
+                            pathname === item.href
+                              ? 'text-foreground bg-muted font-semibold'
+                              : 'text-foreground/60'
+                          )}
+                        >
+                          <item.icon className="h-5 w-5" />
+                          <span className="text-lg">{item.label}</span>
+                        </Link>
+                      ))}
                   </nav>
                 </div>
               </SheetContent>
