@@ -1,6 +1,6 @@
 'use client';
 
-import { createContext, useContext, useEffect, useState } from 'react';
+import { createContext, useContext, useEffect, useState, useMemo } from 'react';
 import { getAuth, onAuthStateChanged, GoogleAuthProvider, signInWithPopup, signOut, type User } from 'firebase/auth';
 import { app } from './client';
 import { Loader2 } from 'lucide-react';
@@ -14,13 +14,19 @@ interface AuthContextType {
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
-// Initialize Auth only if Firebase app is available
-const auth = app ? getAuth(app) : null;
-const provider = app ? new GoogleAuthProvider() : null;
-
 export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   const [user, setUser] = useState<User | null>(null);
   const [loading, setLoading] = useState(true);
+
+  const { auth, provider } = useMemo(() => {
+    if (app) {
+      const authInstance = getAuth(app);
+      const providerInstance = new GoogleAuthProvider();
+      return { auth: authInstance, provider: providerInstance };
+    }
+    return { auth: null, provider: null };
+  }, []);
+
 
   useEffect(() => {
     if (!auth) {
@@ -32,7 +38,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
       setLoading(false);
     });
     return () => unsubscribe();
-  }, []);
+  }, [auth]);
   
   const handleSignIn = async () => {
     if (!auth || !provider) {
