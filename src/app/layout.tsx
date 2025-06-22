@@ -1,9 +1,7 @@
 import type { Metadata } from 'next';
 import './globals.css';
-import { SidebarProvider, Sidebar, SidebarHeader, SidebarInset } from '@/components/ui/sidebar';
 import { Toaster } from '@/components/ui/toaster';
-import Logo from '@/components/logo';
-import { MainNav } from '@/components/main-nav';
+import { AppLayout } from '@/components/app-layout';
 
 export const metadata: Metadata = {
   title: 'Visionary',
@@ -23,15 +21,7 @@ export default function RootLayout({
         <link href="https://fonts.googleapis.com/css2?family=Alegreya:ital,wght@0,400..900;1,400..900&family=Belleza&display=swap" rel="stylesheet" />
       </head>
       <body className="font-body antialiased">
-        <SidebarProvider>
-          <Sidebar>
-            <SidebarHeader>
-              <Logo />
-            </SidebarHeader>
-            <MainNav />
-          </Sidebar>
-          <SidebarInset>{children}</SidebarInset>
-        </SidebarProvider>
+        <AppLayout>{children}</AppLayout>
         <Toaster />
       </body>
     </html>
