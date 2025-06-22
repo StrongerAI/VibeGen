@@ -104,7 +104,7 @@ export function TopNav() {
               </DropdownMenuContent>
             </DropdownMenu>
           ) : (
-            <Button onClick={handleSignIn} className="hidden md:inline-flex">
+            <Button onClick={handleSignIn}>
               Sign In
             </Button>
           )}
@@ -143,17 +143,6 @@ export function TopNav() {
                         <span className="text-lg">{item.label}</span>
                       </Link>
                     ))}
-                    {!user && !loading && (
-                      <Button
-                        onClick={() => {
-                          handleSignIn();
-                          setOpen(false);
-                        }}
-                        className="w-full mt-6"
-                      >
-                        Sign In
-                      </Button>
-                    )}
                   </nav>
                 </div>
               </SheetContent>
