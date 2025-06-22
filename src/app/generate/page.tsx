@@ -3,7 +3,7 @@ import Image from "next/image";
 
 export default function GeneratePage() {
   return (
-    <main className="flex flex-col items-center p-4 md:p-8 min-h-screen dark-splash-bg">
+    <main className="flex flex-col items-center p-4 md:p-8 min-h-screen generator-bg">
       <div className="text-center my-8 md:my-16">
         <h1 className="text-5xl md:text-7xl font-headline text-transparent bg-clip-text bg-gradient-to-r from-primary to-accent">
           Image Generator
