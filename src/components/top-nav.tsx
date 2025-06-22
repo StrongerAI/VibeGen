@@ -30,9 +30,17 @@ export function TopNav() {
   const pathname = usePathname();
   const [open, setOpen] = React.useState(false);
   const { user, loading, handleSignIn, handleSignOut } = useAuth();
+  const isLanding = pathname === '/';
 
   return (
-    <header className="sticky top-0 z-50 w-full border-b border-border/40 bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
+    <header
+      className={cn(
+        'sticky top-0 z-50 w-full border-b',
+        isLanding
+          ? 'border-transparent'
+          : 'border-border/40 bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60'
+      )}
+    >
       <div className="container flex h-14 max-w-screen-2xl items-center justify-between">
         <div className="flex items-center">
           <Link href="/" className="mr-6 flex items-center space-x-2">
@@ -62,7 +70,10 @@ export function TopNav() {
           ) : user ? (
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
-                <Button variant="ghost" className="relative h-10 w-10 rounded-full">
+                <Button
+                  variant="ghost"
+                  className="relative h-10 w-10 rounded-full"
+                >
                   <Avatar className="h-10 w-10">
                     <AvatarImage
                       src={user.photoURL || undefined}

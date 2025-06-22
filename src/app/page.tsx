@@ -8,7 +8,7 @@ export default function Home() {
   return (
     <div className="flex flex-col paint-splash-bg">
       {/* Hero Section */}
-      <section className="w-full flex items-center justify-center text-center min-h-screen">
+      <section className="w-full flex items-center justify-center text-center min-h-[calc(100vh-3.5rem)]">
         <div className="container px-4 md:px-6">
           <div className="max-w-4xl mx-auto">
             <h1 className="text-5xl md:text-8xl font-headline text-transparent bg-clip-text bg-gradient-to-r from-primary to-accent transition-transform duration-300 hover:scale-105 cursor-pointer">
