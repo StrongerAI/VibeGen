@@ -20,6 +20,7 @@ export function TopNav() {
   const pathname = usePathname();
   const { user, loading, handleSignIn, handleSignOut } = useAuth();
   const isLanding = pathname === '/';
+  const isGeneratorPage = pathname === '/generate';
 
   return (
     <header
@@ -30,7 +31,7 @@ export function TopNav() {
           : 'border-border/40 bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60'
       )}
     >
-      <div className="container flex h-14 max-w-screen-2xl items-center justify-between px-6">
+      <div className="container relative flex h-14 max-w-screen-2xl items-center justify-between px-6">
         <div className="flex items-center">
           <Link href="/" className="mr-6 flex items-center space-x-2">
             <Logo />
@@ -55,6 +56,15 @@ export function TopNav() {
           </nav>
         </div>
 
+        {isGeneratorPage && user && (
+            <div className="absolute left-1/2 top-1/2 -translate-y-1/2 -translate-x-1/2">
+                <Button onClick={handleSignOut} variant="outline">
+                    <LogOut className="mr-2 h-4 w-4" />
+                    Sign Out
+                </Button>
+            </div>
+        )}
+
         <div className="flex items-center gap-4">
           {loading ? (
             <Skeleton className="h-10 w-10 rounded-full" />
@@ -69,10 +79,12 @@ export function TopNav() {
                         {user.displayName?.charAt(0) || 'U'}
                     </AvatarFallback>
                 </Avatar>
-                <Button onClick={handleSignOut} variant="outline">
-                    <LogOut className="mr-2 h-4 w-4" />
-                    Sign Out
-                </Button>
+                {!isGeneratorPage && (
+                    <Button onClick={handleSignOut} variant="outline">
+                        <LogOut className="mr-2 h-4 w-4" />
+                        Sign Out
+                    </Button>
+                )}
             </div>
           ) : (
             isLanding && <Button onClick={handleSignIn}>Sign In</Button>
