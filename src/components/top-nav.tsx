@@ -4,7 +4,7 @@ import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import Logo from '@/components/logo';
 import { Button } from '@/components/ui/button';
-import { Home, Sparkles, Gem, LogOut } from 'lucide-react';
+import { Home, Sparkles, Gem, LogOut, LogIn } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { useAuth } from '@/lib/firebase/auth';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
@@ -56,13 +56,20 @@ export function TopNav() {
           </nav>
         </div>
 
-        {isGeneratorPage && user && (
-            <div className="absolute left-1/2 top-1/2 -translate-y-1/2 -translate-x-1/2">
-                <Button onClick={handleSignOut} variant="outline">
-                    <LogOut className="mr-2 h-4 w-4" />
-                    Sign Out
-                </Button>
-            </div>
+        {isGeneratorPage && (
+          <div className="absolute left-1/2 top-1/2 -translate-y-1/2 -translate-x-1/2">
+            {user ? (
+              <Button onClick={handleSignOut} variant="outline">
+                <LogOut className="mr-2 h-4 w-4" />
+                Sign Out
+              </Button>
+            ) : (
+              <Button onClick={handleSignIn}>
+                <LogIn className="mr-2 h-4 w-4" />
+                Sign In
+              </Button>
+            )}
+          </div>
         )}
 
         <div className="flex items-center gap-4">
