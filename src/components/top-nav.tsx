@@ -1,4 +1,3 @@
-
 'use client';
 
 import Link from 'next/link';
@@ -8,14 +7,6 @@ import { Button } from '@/components/ui/button';
 import { Home, Sparkles, Gem, LogOut } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { useAuth } from '@/lib/firebase/auth';
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuLabel,
-  DropdownMenuSeparator,
-  DropdownMenuTrigger,
-} from '@/components/ui/dropdown-menu';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Skeleton } from '@/components/ui/skeleton';
 
@@ -68,39 +59,21 @@ export function TopNav() {
           {loading ? (
             <Skeleton className="h-10 w-10 rounded-full" />
           ) : user ? (
-            <DropdownMenu>
-              <DropdownMenuTrigger asChild>
-                <Button variant="ghost" className="flex items-center gap-2.5 px-2">
-                  <Avatar className="h-8 w-8">
+            <div className="flex items-center gap-4">
+                <Avatar className="h-9 w-9">
                     <AvatarImage
-                      src={user.photoURL || undefined}
-                      alt={user.displayName || 'User'}
+                        src={user.photoURL || undefined}
+                        alt={user.displayName || 'User'}
                     />
                     <AvatarFallback>
-                      {user.displayName?.charAt(0) || 'U'}
+                        {user.displayName?.charAt(0) || 'U'}
                     </AvatarFallback>
-                  </Avatar>
-                   <span className="text-sm font-medium">{user.displayName}</span>
+                </Avatar>
+                <Button onClick={handleSignOut} variant="outline">
+                    <LogOut className="mr-2 h-4 w-4" />
+                    Sign Out
                 </Button>
-              </DropdownMenuTrigger>
-              <DropdownMenuContent className="w-56" align="end" forceMount>
-                <DropdownMenuLabel className="font-normal">
-                  <div className="flex flex-col space-y-1">
-                    <p className="text-sm font-medium leading-none">
-                      {user.displayName}
-                    </p>
-                    <p className="text-xs leading-none text-muted-foreground">
-                      {user.email}
-                    </p>
-                  </div>
-                </DropdownMenuLabel>
-                <DropdownMenuSeparator />
-                <DropdownMenuItem onClick={handleSignOut}>
-                  <LogOut className="mr-2 h-4 w-4" />
-                  <span>Log out</span>
-                </DropdownMenuItem>
-              </DropdownMenuContent>
-            </DropdownMenu>
+            </div>
           ) : (
             isLanding && <Button onClick={handleSignIn}>Sign In</Button>
           )}
