@@ -8,7 +8,7 @@ export default function Home() {
   return (
     <div className="flex flex-col bg-background">
       {/* Hero Section */}
-      <section className="w-full py-20 lg:py-32 text-center">
+      <section className="w-full flex items-center justify-center text-center min-h-screen">
         <div className="container px-4 md:px-6">
           <div className="max-w-4xl mx-auto">
             <h1 className="text-5xl md:text-7xl font-headline font-bold text-transparent bg-clip-text bg-gradient-to-r from-primary to-accent">
