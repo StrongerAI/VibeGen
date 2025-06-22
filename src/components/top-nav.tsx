@@ -1,3 +1,4 @@
+
 'use client';
 
 import Link from 'next/link';
@@ -69,11 +70,8 @@ export function TopNav() {
           ) : user ? (
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
-                <Button
-                  variant="ghost"
-                  className="relative h-10 w-10 rounded-full"
-                >
-                  <Avatar className="h-10 w-10">
+                <Button variant="ghost" className="flex items-center gap-2.5 px-2">
+                  <Avatar className="h-8 w-8">
                     <AvatarImage
                       src={user.photoURL || undefined}
                       alt={user.displayName || 'User'}
@@ -82,6 +80,7 @@ export function TopNav() {
                       {user.displayName?.charAt(0) || 'U'}
                     </AvatarFallback>
                   </Avatar>
+                   <span className="hidden text-sm font-medium sm:inline-block">{user.displayName}</span>
                 </Button>
               </DropdownMenuTrigger>
               <DropdownMenuContent className="w-56" align="end" forceMount>
