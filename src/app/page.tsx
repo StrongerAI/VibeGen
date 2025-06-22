@@ -14,10 +14,10 @@ export default function Home() {
             <h1 className="text-5xl md:text-8xl font-headline font-bold text-transparent bg-clip-text bg-gradient-to-r from-primary to-accent">
               VibeGen
             </h1>
-            <p className="mt-6 text-2xl md:text-3xl text-muted-foreground max-w-3xl mx-auto">
+            <p className="mt-4 text-2xl md:text-3xl text-muted-foreground max-w-3xl mx-auto">
               Your vibes, visualized.
             </p>
-            <p className="mt-4 text-lg md:text-xl text-muted-foreground/90 max-w-2xl mx-auto">
+            <p className="mt-8 text-lg md:text-xl text-muted-foreground/90 max-w-2xl mx-auto">
               Transform your text prompts into breathtaking images with the power of AI. Effortless, fast, and stunningly creative.
             </p>
             <div className="mt-10 flex justify-center gap-4">
