@@ -1,7 +1,6 @@
 'use client';
 
-import { useState, useTransition, useEffect, useRef } from 'react';
-import { useFormState } from 'react-dom';
+import { useState, useTransition, useEffect, useRef, useActionState } from 'react';
 import { useToast } from '@/hooks/use-toast';
 import { handleGenerateImage, handleEnhanceImage } from '@/app/actions';
 import { Button } from '@/components/ui/button';
@@ -17,7 +16,7 @@ const initialState = {
 };
 
 export default function ImageGenerator() {
-  const [state, formAction] = useFormState(handleGenerateImage, initialState);
+  const [state, formAction] = useActionState(handleGenerateImage, initialState);
   const { toast } = useToast();
   const formRef = useRef<HTMLFormElement>(null);
 
