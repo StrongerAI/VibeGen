@@ -4,7 +4,7 @@ import { Toaster } from '@/components/ui/toaster';
 import { AppLayout } from '@/components/app-layout';
 
 export const metadata: Metadata = {
-  title: 'Visionary',
+  title: 'VibeGen',
   description: 'Generate images from your imagination',
 };
 

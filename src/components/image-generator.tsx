@@ -67,7 +67,7 @@ export default function ImageGenerator() {
     const link = document.createElement('a');
     link.href = currentImageUrl;
     const fileExtension = currentImageUrl.split(';')[0].split('/')[1] || 'png';
-    link.download = `visionary-art.${fileExtension}`;
+    link.download = `vibegen-art.${fileExtension}`;
     document.body.appendChild(link);
     link.click();
     document.body.removeChild(link);

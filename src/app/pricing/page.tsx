@@ -31,7 +31,7 @@ const plans = [
     primary: true,
   },
   {
-    name: "Visionary",
+    name: "VibeGen",
     price: "$49",
     period: "/ month",
     description: "Unleash your full creative potential.",
@@ -41,7 +41,7 @@ const plans = [
       "Advanced AI tuning options",
       "Dedicated support",
     ],
-    cta: "Become a Visionary",
+    cta: "Get VibeGen",
     primary: false,
   },
 ];

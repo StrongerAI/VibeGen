@@ -12,7 +12,7 @@ export default function Home() {
         <div className="container px-4 md:px-6">
           <div className="max-w-4xl mx-auto">
             <h1 className="text-5xl md:text-7xl font-headline font-bold text-transparent bg-clip-text bg-gradient-to-r from-primary to-accent">
-              Visionary: Your Ideas, Visualized
+              VibeGen: Your Vibes, Visualized
             </h1>
             <p className="mt-6 text-lg md:text-xl text-muted-foreground max-w-2xl mx-auto">
               Transform your text prompts into breathtaking images with the power of AI. Effortless, fast, and stunningly creative.
@@ -90,7 +90,7 @@ export default function Home() {
           <div className="text-center mb-12">
             <h2 className="text-4xl font-headline font-bold">From Words to Wonders</h2>
             <p className="mt-4 text-lg text-muted-foreground">
-              See what's possible with Visionary.
+              See what's possible with VibeGen.
             </p>
           </div>
           <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
