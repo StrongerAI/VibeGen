@@ -1,6 +1,6 @@
 'use client';
 
-import { initializeApp, getApp, getApps } from 'firebase/app';
+import { initializeApp, getApp, getApps, type FirebaseApp } from 'firebase/app';
 
 const firebaseConfig = {
   apiKey: process.env.NEXT_PUBLIC_FIREBASE_API_KEY,
@@ -11,16 +11,15 @@ const firebaseConfig = {
   appId: process.env.NEXT_PUBLIC_FIREBASE_APP_ID,
 };
 
-// Validate environment variables
-const missingVars = Object.entries(firebaseConfig)
-  .filter(([, value]) => !value || value === 'undefined') // Also check for the string 'undefined'
-  .map(([key]) => key);
+let app: FirebaseApp | null = null;
 
-if (missingVars.length > 0) {
-  console.warn(`Missing or invalid Firebase environment variables: ${missingVars.join(', ')}. Firebase features will be disabled.`);
+const configValues = Object.values(firebaseConfig);
+const isConfigComplete = configValues.every(value => value && value !== 'undefined');
+
+if (isConfigComplete) {
+  app = getApps().length === 0 ? initializeApp(firebaseConfig) : getApp();
+} else {
+  console.warn("Firebase configuration is incomplete or invalid. Firebase features will be disabled.");
 }
-
-// Initialize Firebase only if config is valid
-const app = missingVars.length === 0 && getApps().length === 0 ? initializeApp(firebaseConfig) : (getApps().length > 0 ? getApp() : null);
 
 export { app };
