@@ -6,7 +6,13 @@ import Logo from '@/components/logo';
 import { Button } from '@/components/ui/button';
 import { Home, Sparkles, Gem, Menu, LogOut } from 'lucide-react';
 import { cn } from '@/lib/utils';
-import { Sheet, SheetContent, SheetTrigger } from '@/components/ui/sheet';
+import {
+  Sheet,
+  SheetContent,
+  SheetHeader,
+  SheetTitle,
+  SheetTrigger,
+} from '@/components/ui/sheet';
 import React from 'react';
 import { useAuth } from '@/lib/firebase/auth';
 import {
@@ -104,9 +110,7 @@ export function TopNav() {
               </DropdownMenuContent>
             </DropdownMenu>
           ) : (
-            <Button onClick={handleSignIn}>
-              Sign In
-            </Button>
+            <Button onClick={handleSignIn}>Sign In</Button>
           )}
 
           <div className="md:hidden">
@@ -118,6 +122,9 @@ export function TopNav() {
                 </Button>
               </SheetTrigger>
               <SheetContent side="right">
+                <SheetHeader>
+                  <SheetTitle className="sr-only">Mobile Menu</SheetTitle>
+                </SheetHeader>
                 <div className="p-4">
                   <Link
                     href="/"
