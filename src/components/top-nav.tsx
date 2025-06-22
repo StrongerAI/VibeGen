@@ -20,7 +20,6 @@ export function TopNav() {
   const pathname = usePathname();
   const { user, loading, handleSignIn, handleSignOut } = useAuth();
   const isLanding = pathname === '/';
-  const isGeneratorPage = pathname === '/generate';
 
   return (
     <header
@@ -56,45 +55,30 @@ export function TopNav() {
           </nav>
         </div>
 
-        {isGeneratorPage && (
-          <div className="absolute left-1/2 top-1/2 -translate-y-1/2 -translate-x-1/2">
-            {user ? (
+        <div className="flex items-center gap-4">
+          {loading ? (
+            <Skeleton className="h-10 w-28 rounded-md" />
+          ) : user ? (
+            <>
+              <Avatar className="h-9 w-9">
+                <AvatarImage
+                  src={user.photoURL || undefined}
+                  alt={user.displayName || 'User'}
+                />
+                <AvatarFallback>
+                  {user.displayName?.charAt(0) || 'U'}
+                </AvatarFallback>
+              </Avatar>
               <Button onClick={handleSignOut} variant="outline">
                 <LogOut className="mr-2 h-4 w-4" />
                 Sign Out
               </Button>
-            ) : (
-              <Button onClick={handleSignIn}>
-                <LogIn className="mr-2 h-4 w-4" />
-                Sign In
-              </Button>
-            )}
-          </div>
-        )}
-
-        <div className="flex items-center gap-4">
-          {loading ? (
-            <Skeleton className="h-10 w-10 rounded-full" />
-          ) : user ? (
-            <div className="flex items-center gap-4">
-                <Avatar className="h-9 w-9">
-                    <AvatarImage
-                        src={user.photoURL || undefined}
-                        alt={user.displayName || 'User'}
-                    />
-                    <AvatarFallback>
-                        {user.displayName?.charAt(0) || 'U'}
-                    </AvatarFallback>
-                </Avatar>
-                {!isGeneratorPage && (
-                    <Button onClick={handleSignOut} variant="outline">
-                        <LogOut className="mr-2 h-4 w-4" />
-                        Sign Out
-                    </Button>
-                )}
-            </div>
+            </>
           ) : (
-            isLanding && <Button onClick={handleSignIn}>Sign In</Button>
+            <Button onClick={handleSignIn}>
+              <LogIn className="mr-2 h-4 w-4" />
+              Sign In
+            </Button>
           )}
         </div>
       </div>
