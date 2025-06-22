@@ -4,6 +4,7 @@ import { createContext, useContext, useEffect, useState } from 'react';
 import { getAuth, onAuthStateChanged, GoogleAuthProvider, signInWithPopup, signOut, type User, type Auth } from 'firebase/auth';
 import { app } from './client';
 import { Loader2 } from 'lucide-react';
+import { useToast } from '@/hooks/use-toast';
 
 interface AuthContextType {
   user: User | null;
@@ -14,16 +15,15 @@ interface AuthContextType {
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
-// Initialize auth at the module level for stability.
 const auth: Auth | null = app ? getAuth(app) : null;
 
 export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   const [user, setUser] = useState<User | null>(null);
   const [loading, setLoading] = useState(true);
+  const { toast } = useToast();
 
   useEffect(() => {
     if (!auth) {
-      // This handles the case where Firebase config is missing.
       setLoading(false);
       return;
     }
@@ -32,11 +32,16 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
       setLoading(false);
     });
     return () => unsubscribe();
-  }, []); // Empty dependency array is correct as `auth` is a stable module constant.
+  }, []);
   
   const handleSignIn = async () => {
     if (!auth) {
         console.error("Firebase Auth not initialized.");
+        toast({
+            title: "Authentication Error",
+            description: "The authentication service is not configured. Please contact support.",
+            variant: "destructive",
+        });
         return;
     }
     try {
@@ -44,18 +49,33 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
       await signInWithPopup(auth, provider);
     } catch (error) {
       console.error("Error signing in with Google: ", error);
+      toast({
+        title: "Sign-In Failed",
+        description: "An error occurred while signing in with Google. Please try again.",
+        variant: "destructive",
+    });
     }
   };
 
   const handleSignOut = async () => {
     if (!auth) {
         console.error("Firebase Auth not initialized.");
+        toast({
+            title: "Authentication Error",
+            description: "The authentication service is not configured. Please contact support.",
+            variant: "destructive",
+        });
         return;
     }
     try {
       await signOut(auth);
     } catch (error) {
       console.error("Error signing out: ", error);
+      toast({
+        title: "Sign-Out Failed",
+        description: "An error occurred while signing out. Please try again.",
+        variant: "destructive",
+    });
     }
   };
 
