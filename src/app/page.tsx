@@ -17,7 +17,7 @@ export default function Home() {
             <p className="mt-4 text-2xl md:text-3xl text-muted-foreground max-w-3xl mx-auto">
               Your vibes, visualized.
             </p>
-            <p className="mt-16 text-lg md:text-xl text-muted-foreground/90 max-w-2xl mx-auto">
+            <p className="mt-16 text-lg md:text-xl text-muted-foreground max-w-2xl mx-auto">
               Transform your text prompts into breathtaking images with the power of AI. Effortless, fast, and stunningly creative.
             </p>
             <div className="mt-12 flex justify-center gap-4">
