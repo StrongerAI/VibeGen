@@ -6,12 +6,12 @@ import Link from "next/link";
 
 export default function Home() {
   return (
-    <div className="flex flex-col bg-background">
+    <div className="flex flex-col bg-gradient-to-br from-background via-[hsl(var(--primary)/0.05)] to-background bg-[length:200%_200%] animate-background-pan">
       {/* Hero Section */}
       <section className="w-full flex items-center justify-center text-center min-h-screen">
         <div className="container px-4 md:px-6">
           <div className="max-w-4xl mx-auto">
-            <h1 className="text-5xl md:text-8xl font-headline font-bold text-transparent bg-clip-text bg-gradient-to-r from-primary to-accent">
+            <h1 className="text-5xl md:text-8xl font-headline font-bold text-transparent bg-clip-text bg-gradient-to-r from-primary to-accent transition-transform duration-300 hover:scale-105 cursor-pointer">
               VibeGen
             </h1>
             <p className="mt-4 text-2xl md:text-3xl text-muted-foreground max-w-3xl mx-auto">
@@ -21,7 +21,7 @@ export default function Home() {
               Transform your text prompts into breathtaking images with the power of AI. Effortless, fast, and stunningly creative.
             </p>
             <div className="mt-12 flex justify-center gap-4">
-              <Button asChild size="lg">
+              <Button asChild size="lg" className="transition-all duration-300 hover:shadow-lg hover:shadow-primary/40">
                 <Link href="/generate">
                   Start Creating <ArrowRight className="ml-2 h-5 w-5" />
                 </Link>
@@ -141,7 +141,7 @@ export default function Home() {
             Join thousands of creators turning their imagination into reality. Your next masterpiece is just a prompt away.
           </p>
           <div className="mt-8">
-            <Button asChild size="lg">
+            <Button asChild size="lg" className="transition-all duration-300 hover:shadow-lg hover:shadow-primary/40">
               <Link href="/generate">
                 Start Generating Now <ArrowRight className="ml-2 h-5 w-5" />
               </Link>
