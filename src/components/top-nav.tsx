@@ -1,20 +1,11 @@
-
 'use client';
 
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import Logo from '@/components/logo';
 import { Button } from '@/components/ui/button';
-import { Home, Sparkles, Gem, Menu, LogOut } from 'lucide-react';
+import { Home, Sparkles, Gem, LogOut } from 'lucide-react';
 import { cn } from '@/lib/utils';
-import {
-  Sheet,
-  SheetContent,
-  SheetHeader,
-  SheetTitle,
-  SheetTrigger,
-} from '@/components/ui/sheet';
-import React from 'react';
 import { useAuth } from '@/lib/firebase/auth';
 import {
   DropdownMenu,
@@ -35,7 +26,6 @@ const navItems = [
 
 export function TopNav() {
   const pathname = usePathname();
-  const [open, setOpen] = React.useState(false);
   const { user, loading, handleSignIn, handleSignOut } = useAuth();
   const isLanding = pathname === '/';
 
@@ -115,51 +105,6 @@ export function TopNav() {
           ) : (
             <Button onClick={handleSignIn}>Sign In</Button>
           )}
-
-          <div className="md:hidden">
-            <Sheet open={open} onOpenChange={setOpen}>
-              <SheetTrigger asChild>
-                <Button variant="ghost" size="icon">
-                  <Menu />
-                  <span className="sr-only">Open Menu</span>
-                </Button>
-              </SheetTrigger>
-              <SheetContent side="right">
-                <SheetHeader>
-                  <SheetTitle className="sr-only">Mobile Menu</SheetTitle>
-                </SheetHeader>
-                <div className="p-4">
-                  <Link
-                    href="/"
-                    className="mb-8 flex items-center"
-                    onClick={() => setOpen(false)}
-                  >
-                    <Logo />
-                  </Link>
-                  <nav className="flex flex-col gap-4">
-                    {navItems
-                      .filter((item) => !isLanding || item.href !== '/')
-                      .map((item) => (
-                        <Link
-                          key={item.label}
-                          href={item.href}
-                          onClick={() => setOpen(false)}
-                          className={cn(
-                            'transition-colors hover:text-foreground/80 flex items-center gap-3 p-2 rounded-md',
-                            pathname === item.href
-                              ? 'text-foreground bg-muted font-semibold'
-                              : 'text-foreground/60'
-                          )}
-                        >
-                          <item.icon className="h-5 w-5" />
-                          <span className="text-lg">{item.label}</span>
-                        </Link>
-                      ))}
-                  </nav>
-                </div>
-              </SheetContent>
-            </Sheet>
-          </div>
         </div>
       </div>
     </header>
