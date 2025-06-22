@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useTransition, useEffect, useRef, useActionState } from 'react';
+import { useState, useTransition, useEffect, useRef, useActionState, useMemo } from 'react';
 import { useToast } from '@/hooks/use-toast';
 import { handleGenerateImage, handleEnhanceImage } from '@/app/actions';
 import { Button } from '@/components/ui/button';
@@ -9,6 +9,17 @@ import { Card, CardContent, CardFooter, CardHeader } from '@/components/ui/card'
 import Image from 'next/image';
 import { Download, Wand2, Loader2, Image as ImageIcon } from 'lucide-react';
 import { SubmitButton } from './submit-button';
+import { useAuth } from '@/lib/firebase/auth';
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+} from '@/components/ui/alert-dialog';
+import { useRouter } from 'next/navigation';
 
 const initialState = {
   imageUrl: undefined,
@@ -16,17 +27,32 @@ const initialState = {
 };
 
 export default function ImageGenerator() {
+  const { user } = useAuth();
   const [state, formAction] = useActionState(handleGenerateImage, initialState);
   const { toast } = useToast();
   const formRef = useRef<HTMLFormElement>(null);
+  const router = useRouter();
 
   const [enhancedImageUrl, setEnhancedImageUrl] = useState<string | null>(null);
   const [isEnhancing, startEnhancingTransition] = useTransition();
+  const [showLimitDialog, setShowLimitDialog] = useState(false);
+  const [generationCount, setGenerationCount] = useState(0);
 
-  const currentImageUrl = enhancedImageUrl || state.imageUrl;
+  const limit = useMemo(() => (user ? 10 : 1), [user]);
+  const storageKey = useMemo(() => {
+    return user ? `vibegen_count_${user.uid}` : 'vibegen_count_guest';
+  }, [user]);
 
   useEffect(() => {
-    if (state.error) {
+    const storedCount = localStorage.getItem(storageKey);
+    setGenerationCount(storedCount ? parseInt(storedCount, 10) : 0);
+  }, [storageKey]);
+  
+  const currentImageUrl = enhancedImageUrl || state.imageUrl;
+  const remainingCount = Math.max(0, limit - generationCount);
+
+  useEffect(() => {
+    if (state.error && state.error !== 'Limit reached') {
       toast({
         title: 'Generation Failed',
         description: state.error,
@@ -34,13 +60,13 @@ export default function ImageGenerator() {
       });
     }
     if (state.imageUrl) {
-        setEnhancedImageUrl(null); // Reset enhanced image when a new one is generated
+        setEnhancedImageUrl(null);
         toast({
             title: 'Image Generated!',
-            description: 'Your vision has come to life.',
+            description: `You have ${remainingCount} generations left.`,
         });
     }
-  }, [state, toast]);
+  }, [state, toast, remainingCount]);
 
   const onEnhance = () => {
     if (!state.imageUrl) return;
@@ -73,9 +99,23 @@ export default function ImageGenerator() {
     document.body.removeChild(link);
   };
   
+  const handleFormActionWrapper = (formData: FormData) => {
+    if (generationCount >= limit) {
+      setShowLimitDialog(true);
+      return;
+    }
+
+    const newCount = generationCount + 1;
+    localStorage.setItem(storageKey, newCount.toString());
+    setGenerationCount(newCount);
+    
+    formAction(formData);
+  };
+  
   return (
+    <>
     <Card className="w-full max-w-4xl shadow-2xl bg-card/50 backdrop-blur-sm border-border/20">
-      <form ref={formRef} action={formAction}>
+      <form ref={formRef} action={handleFormActionWrapper}>
         <CardHeader>
           <div className="relative">
             <Textarea
@@ -88,6 +128,9 @@ export default function ImageGenerator() {
               <SubmitButton />
             </div>
           </div>
+          <p className="text-sm text-muted-foreground text-center mt-2">
+            You have {remainingCount} free generation{remainingCount !== 1 ? 's' : ''} remaining.
+          </p>
         </CardHeader>
       </form>
       <CardContent>
@@ -125,5 +168,28 @@ export default function ImageGenerator() {
         </CardFooter>
       )}
     </Card>
+    <AlertDialog open={showLimitDialog} onOpenChange={setShowLimitDialog}>
+        <AlertDialogContent>
+          <AlertDialogHeader>
+            <AlertDialogTitle>
+              {user ? 'Upgrade to Keep Creating' : 'Create an Account to Continue'}
+            </AlertDialogTitle>
+            <AlertDialogDescription>
+              {user
+                ? `You've used all ${limit} of your free image generations.`
+                : "You've used your free image generation. Create a free account to get more."}
+              {' '}
+              Please view our pricing options to unlock more features.
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+          <AlertDialogFooter>
+            <Button variant="secondary" onClick={() => setShowLimitDialog(false)}>Cancel</Button>
+            <AlertDialogAction asChild>
+              <Button onClick={() => router.push('/pricing')}>View Pricing</Button>
+            </AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
+    </>
   );
 }

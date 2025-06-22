@@ -1,6 +1,10 @@
+'use client';
+
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Check } from "lucide-react";
+import { useAuth } from "@/lib/firebase/auth";
+import { useRouter } from "next/navigation";
 
 const plans = [
   {
@@ -13,7 +17,7 @@ const plans = [
       "Standard resolution images",
       "Community support",
     ],
-    cta: "Start for Free",
+    cta: "Get Started",
     primary: false,
   },
   {
@@ -47,6 +51,21 @@ const plans = [
 ];
 
 export default function PricingPage() {
+  const { user, handleSignIn } = useAuth();
+  const router = useRouter();
+
+  const handlePlanClick = (planName: string) => {
+    if (user) {
+      if (planName === 'Free') {
+        router.push('/generate');
+      } else {
+        alert(`You have chosen the ${planName} plan. Payment integration is coming soon!`);
+      }
+    } else {
+      handleSignIn();
+    }
+  };
+
   return (
     <div className="container mx-auto max-w-7xl px-4 py-12 sm:px-6 lg:px-8">
       <div className="text-center">
@@ -81,8 +100,13 @@ export default function PricingPage() {
               </ul>
             </CardContent>
             <CardFooter>
-              <Button className="w-full" variant={plan.primary ? 'default' : 'secondary'} size="lg">
-                {plan.cta}
+              <Button 
+                className="w-full" 
+                variant={plan.primary ? 'default' : 'secondary'} 
+                size="lg"
+                onClick={() => handlePlanClick(plan.name)}
+              >
+                {user ? plan.cta : "Sign In to Choose"}
               </Button>
             </CardFooter>
           </Card>
