@@ -12,7 +12,7 @@ export default function Home() {
         <div className="container px-4 md:px-6">
           <div className="max-w-4xl mx-auto">
             <h1 className="text-5xl md:text-8xl font-headline text-transparent bg-clip-text bg-gradient-to-r from-primary to-accent transition-transform duration-300 hover:scale-105 cursor-pointer">
-              Visionary
+              VibeGen
             </h1>
             <p className="mt-4 text-2xl md:text-3xl text-muted-foreground max-w-3xl mx-auto">
               Your vision, visualized.
@@ -93,7 +93,7 @@ export default function Home() {
           <div className="text-center mb-12">
             <h2 className="text-4xl font-headline font-bold">From Words to Wonders</h2>
             <p className="mt-4 text-lg text-muted-foreground">
-              See what's possible with Visionary.
+              See what's possible with VibeGen.
             </p>
           </div>
           <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
