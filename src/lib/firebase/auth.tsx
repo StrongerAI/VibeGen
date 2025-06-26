@@ -1,7 +1,7 @@
 'use client';
 
 import { createContext, useContext, useEffect, useState } from 'react';
-import { getAuth, onAuthStateChanged, GoogleAuthProvider, signInWithPopup, signOut, type User, type Auth, createUserWithEmailAndPassword } from 'firebase/auth';
+import { getAuth, onAuthStateChanged, GoogleAuthProvider, signInWithPopup, signOut, type User, type Auth, createUserWithEmailAndPassword, signInWithEmailAndPassword } from 'firebase/auth';
 import { app } from './client';
 import { Loader2 } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
@@ -13,6 +13,7 @@ interface AuthContextType {
   handleSignIn: () => Promise<void>;
   handleSignOut: () => Promise<void>;
   handleSignUp: (email: string, password: string) => Promise<void>;
+  handleSignInWithEmail: (email: string, password: string) => Promise<void>;
 }
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
@@ -56,15 +57,21 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
         const firebaseError = error as { code: string; message: string };
         if (firebaseError.code === 'auth/api-key-not-valid') {
             description = "The provided Firebase API Key is not valid. Please correct it in your .env.local file."
-        } else {
+        } else if (firebaseError.code !== 'auth/popup-closed-by-user') {
             description = `Error: ${firebaseError.message}`;
+            toast({
+              title: "Sign-In Failed",
+              description: description,
+              variant: "destructive",
+          });
         }
+      } else {
+        toast({
+          title: "Sign-In Failed",
+          description: description,
+          variant: "destructive",
+        });
       }
-      toast({
-        title: "Sign-In Failed",
-        description: description,
-        variant: "destructive",
-    });
     }
   };
 
@@ -126,6 +133,35 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     }
   };
 
+  const handleSignInWithEmail = async (email: string, password: string) => {
+    if (!isFirebaseConfigured || !auth) {
+      throw new Error("The authentication service is not configured.");
+    }
+    try {
+      await signInWithEmailAndPassword(auth, email, password);
+    } catch (error) {
+      console.error("Error signing in: ", error);
+      let message = "An unknown error occurred during sign-in. Please try again.";
+      if (error && typeof error === 'object' && 'code' in error) {
+        const firebaseError = error as { code: string; message: string };
+        switch (firebaseError.code) {
+          case 'auth/user-not-found':
+          case 'auth/wrong-password':
+          case 'auth/invalid-credential':
+             message = 'Invalid email or password. Please try again.';
+            break;
+          case 'auth/invalid-email':
+            message = 'The email address is not valid.';
+            break;
+          default:
+            message = firebaseError.message;
+        }
+      }
+      throw new Error(message);
+    }
+  };
+
+
   if (loading) {
     return (
         <div className="flex items-center justify-center min-h-screen w-full">
@@ -135,7 +171,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   }
 
   return (
-    <AuthContext.Provider value={{ user, loading, isFirebaseConfigured, handleSignIn, handleSignOut, handleSignUp }}>
+    <AuthContext.Provider value={{ user, loading, isFirebaseConfigured, handleSignIn, handleSignOut, handleSignUp, handleSignInWithEmail }}>
       {children}
     </AuthContext.Provider>
   );

@@ -4,7 +4,7 @@ import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import Logo from '@/components/logo';
 import { Button } from '@/components/ui/button';
-import { Home, Sparkles, Gem, LogOut, LogIn, UserPlus } from 'lucide-react';
+import { Home, Sparkles, Gem, LogOut, LogIn } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { useAuth } from '@/lib/firebase/auth';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
@@ -26,10 +26,10 @@ const navItems = [
 
 export function TopNav() {
   const pathname = usePathname();
-  const { user, loading, handleSignIn, handleSignOut, isFirebaseConfigured } =
+  const { user, loading, handleSignOut, isFirebaseConfigured } =
     useAuth();
   const isLanding = pathname === '/';
-  const [isSignUpOpen, setSignUpOpen] = useState(false);
+  const [isAuthDialogOpen, setAuthDialogOpen] = useState(false);
 
   return (
     <header
@@ -65,16 +65,12 @@ export function TopNav() {
 
         <div className="flex items-center gap-4">
           {loading ? (
-            <Skeleton className="h-10 w-48 rounded-md" />
+            <Skeleton className="h-10 w-24 rounded-md" />
           ) : !isFirebaseConfigured ? (
             <TooltipProvider>
               <Tooltip>
                 <TooltipTrigger asChild>
-                  <span tabIndex={0} className="flex items-center gap-4">
-                    <Button disabled variant="secondary">
-                      <UserPlus className="mr-2 h-4 w-4" />
-                      Sign Up
-                    </Button>
+                  <span tabIndex={0}>
                     <Button disabled>
                       <LogIn className="mr-2 h-4 w-4" />
                       Sign In
@@ -103,20 +99,14 @@ export function TopNav() {
               </Button>
             </>
           ) : (
-            <>
-              <Button onClick={() => setSignUpOpen(true)} variant="secondary">
-                <UserPlus className="mr-2 h-4 w-4" />
-                Sign Up
-              </Button>
-              <Button onClick={handleSignIn}>
-                <LogIn className="mr-2 h-4 w-4" />
-                Sign In with Google
-              </Button>
-            </>
+            <Button onClick={() => setAuthDialogOpen(true)}>
+              <LogIn className="mr-2 h-4 w-4" />
+              Sign In
+            </Button>
           )}
         </div>
       </div>
-      <SignUpDialog open={isSignUpOpen} onOpenChange={setSignUpOpen} />
+      <SignUpDialog open={isAuthDialogOpen} onOpenChange={setAuthDialogOpen} />
     </header>
   );
 }
