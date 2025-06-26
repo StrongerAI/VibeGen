@@ -38,10 +38,9 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   
   const handleSignIn = async () => {
     if (!isFirebaseConfigured || !auth) {
-        console.error("Firebase Auth not initialized.");
         toast({
             title: "Authentication Error",
-            description: "The authentication service is not configured. Please contact support.",
+            description: "The authentication service is not configured. Please check your environment variables.",
             variant: "destructive",
         });
         return;
@@ -51,9 +50,18 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
       await signInWithPopup(auth, provider);
     } catch (error) {
       console.error("Error signing in with Google: ", error);
+      let description = "An unknown error occurred during sign-in. Please try again.";
+      if (error && typeof error === 'object' && 'code' in error) {
+        const firebaseError = error as { code: string; message: string };
+        if (firebaseError.code === 'auth/api-key-not-valid') {
+            description = "The provided Firebase API Key is not valid. Please correct it in your .env.local file."
+        } else {
+            description = `Error: ${firebaseError.message}`;
+        }
+      }
       toast({
         title: "Sign-In Failed",
-        description: "An error occurred while signing in with Google. Please try again.",
+        description: description,
         variant: "destructive",
     });
     }
@@ -61,10 +69,9 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
 
   const handleSignOut = async () => {
     if (!isFirebaseConfigured || !auth) {
-        console.error("Firebase Auth not initialized.");
         toast({
             title: "Authentication Error",
-            description: "The authentication service is not configured. Please contact support.",
+            description: "The authentication service is not configured.",
             variant: "destructive",
         });
         return;
@@ -73,9 +80,14 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
       await signOut(auth);
     } catch (error) {
       console.error("Error signing out: ", error);
+      let description = "An unknown error occurred during sign-out. Please try again.";
+      if (error && typeof error === 'object' && 'code' in error) {
+        const firebaseError = error as { code: string; message: string };
+        description = `Error: ${firebaseError.message}`;
+      }
       toast({
         title: "Sign-Out Failed",
-        description: "An error occurred while signing out. Please try again.",
+        description: description,
         variant: "destructive",
     });
     }
