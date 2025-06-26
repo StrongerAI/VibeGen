@@ -4,7 +4,7 @@ import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import Logo from '@/components/logo';
 import { Button } from '@/components/ui/button';
-import { Home, Sparkles, Gem, LogOut, LogIn } from 'lucide-react';
+import { Home, Sparkles, Gem, LogOut, LogIn, UserPlus } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { useAuth } from '@/lib/firebase/auth';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
@@ -15,6 +15,8 @@ import {
   TooltipProvider,
   TooltipTrigger,
 } from '@/components/ui/tooltip';
+import { useState } from 'react';
+import { SignUpDialog } from './sign-up-dialog';
 
 const navItems = [
   { href: '/', label: 'Home', icon: Home },
@@ -27,6 +29,7 @@ export function TopNav() {
   const { user, loading, handleSignIn, handleSignOut, isFirebaseConfigured } =
     useAuth();
   const isLanding = pathname === '/';
+  const [isSignUpOpen, setSignUpOpen] = useState(false);
 
   return (
     <header
@@ -62,12 +65,16 @@ export function TopNav() {
 
         <div className="flex items-center gap-4">
           {loading ? (
-            <Skeleton className="h-10 w-28 rounded-md" />
+            <Skeleton className="h-10 w-48 rounded-md" />
           ) : !isFirebaseConfigured ? (
             <TooltipProvider>
               <Tooltip>
                 <TooltipTrigger asChild>
-                  <span tabIndex={0}>
+                  <span tabIndex={0} className="flex items-center gap-4">
+                    <Button disabled variant="secondary">
+                      <UserPlus className="mr-2 h-4 w-4" />
+                      Sign Up
+                    </Button>
                     <Button disabled>
                       <LogIn className="mr-2 h-4 w-4" />
                       Sign In
@@ -87,7 +94,7 @@ export function TopNav() {
                   alt={user.displayName || 'User'}
                 />
                 <AvatarFallback>
-                  {user.displayName?.charAt(0) || 'U'}
+                  {user.displayName?.charAt(0) || user.email?.charAt(0)?.toUpperCase() || 'U'}
                 </AvatarFallback>
               </Avatar>
               <Button onClick={handleSignOut} variant="outline">
@@ -96,13 +103,20 @@ export function TopNav() {
               </Button>
             </>
           ) : (
-            <Button onClick={handleSignIn}>
-              <LogIn className="mr-2 h-4 w-4" />
-              Sign In
-            </Button>
+            <>
+              <Button onClick={() => setSignUpOpen(true)} variant="secondary">
+                <UserPlus className="mr-2 h-4 w-4" />
+                Sign Up
+              </Button>
+              <Button onClick={handleSignIn}>
+                <LogIn className="mr-2 h-4 w-4" />
+                Sign In with Google
+              </Button>
+            </>
           )}
         </div>
       </div>
+      <SignUpDialog open={isSignUpOpen} onOpenChange={setSignUpOpen} />
     </header>
   );
 }

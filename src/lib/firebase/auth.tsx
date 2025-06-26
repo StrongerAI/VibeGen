@@ -1,7 +1,7 @@
 'use client';
 
 import { createContext, useContext, useEffect, useState } from 'react';
-import { getAuth, onAuthStateChanged, GoogleAuthProvider, signInWithPopup, signOut, type User, type Auth } from 'firebase/auth';
+import { getAuth, onAuthStateChanged, GoogleAuthProvider, signInWithPopup, signOut, type User, type Auth, createUserWithEmailAndPassword } from 'firebase/auth';
 import { app } from './client';
 import { Loader2 } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
@@ -12,6 +12,7 @@ interface AuthContextType {
   isFirebaseConfigured: boolean;
   handleSignIn: () => Promise<void>;
   handleSignOut: () => Promise<void>;
+  handleSignUp: (email: string, password: string) => Promise<void>;
 }
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
@@ -93,6 +94,38 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     }
   };
 
+  const handleSignUp = async (email: string, password: string) => {
+    if (!isFirebaseConfigured || !auth) {
+      throw new Error("The authentication service is not configured.");
+    }
+    try {
+      await createUserWithEmailAndPassword(auth, email, password);
+    } catch (error) {
+      console.error("Error signing up: ", error);
+      let message = "An unknown error occurred during sign-up. Please try again.";
+      if (error && typeof error === 'object' && 'code' in error) {
+        const firebaseError = error as { code: string; message: string };
+        switch (firebaseError.code) {
+          case 'auth/email-already-in-use':
+            message = 'This email address is already in use by another account.';
+            break;
+          case 'auth/invalid-email':
+            message = 'The email address is not valid.';
+            break;
+          case 'auth/operation-not-allowed':
+            message = 'Email/password sign-up is not enabled. Please contact support.';
+            break;
+          case 'auth/weak-password':
+            message = 'The password is too weak. Please choose a stronger password.';
+            break;
+          default:
+            message = firebaseError.message;
+        }
+      }
+      throw new Error(message);
+    }
+  };
+
   if (loading) {
     return (
         <div className="flex items-center justify-center min-h-screen w-full">
@@ -102,7 +135,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   }
 
   return (
-    <AuthContext.Provider value={{ user, loading, isFirebaseConfigured, handleSignIn, handleSignOut }}>
+    <AuthContext.Provider value={{ user, loading, isFirebaseConfigured, handleSignIn, handleSignOut, handleSignUp }}>
       {children}
     </AuthContext.Provider>
   );
