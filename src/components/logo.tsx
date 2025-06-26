@@ -5,7 +5,7 @@ export default function Logo() {
     <div className="flex items-center gap-2">
       <Bot className="h-6 w-6 text-primary" />
       <span className="text-xl font-headline font-bold text-white">
-        VibeGen
+        Visionary
       </span>
     </div>
   );

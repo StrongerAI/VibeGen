@@ -5,7 +5,7 @@ import { AppLayout } from '@/components/app-layout';
 import { AuthProvider } from '@/lib/firebase/auth';
 
 export const metadata: Metadata = {
-  title: 'VibeGen',
+  title: 'Visionary',
   description: 'Generate images from your imagination',
 };
 

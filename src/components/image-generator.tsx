@@ -40,7 +40,7 @@ export default function ImageGenerator() {
 
   const limit = useMemo(() => (user ? 10 : 1), [user]);
   const storageKey = useMemo(() => {
-    return user ? `vibegen_count_${user.uid}` : 'vibegen_count_guest';
+    return user ? `visionary_count_${user.uid}` : 'visionary_count_guest';
   }, [user]);
 
   useEffect(() => {
@@ -93,7 +93,7 @@ export default function ImageGenerator() {
     const link = document.createElement('a');
     link.href = currentImageUrl;
     const fileExtension = currentImageUrl.split(';')[0].split('/')[1] || 'png';
-    link.download = `vibegen-art.${fileExtension}`;
+    link.download = `visionary-art.${fileExtension}`;
     document.body.appendChild(link);
     link.click();
     document.body.removeChild(link);
